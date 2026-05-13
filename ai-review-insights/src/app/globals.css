@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Aetherfield-ish: airy sky gradient + editorial typography + crisp ink outlines */
+  --bg-top: #a9cff5;
+  --bg-mid: #d9ebfb;
+  --bg-bottom: #f4f1e7;
+
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-2: rgba(255, 255, 255, 0.72);
+
+  --text: #0b0f18;
+  --muted: rgba(11, 15, 24, 0.66);
+  --muted-2: rgba(11, 15, 24, 0.46);
+
+  --stroke: rgba(11, 15, 24, 0.16);
+  --stroke-strong: rgba(11, 15, 24, 0.26);
+
+  --accent: #0b0f18;
+  --accent-2: #1f2937;
+
+  --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.04), 0 18px 38px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 1px 0 rgba(0, 0, 0, 0.05), 0 28px 70px rgba(0, 0, 0, 0.12);
+
+  --radius-lg: 22px;
+  --radius-md: 18px;
+  --radius-sm: 14px;
+}
+
+/* 首期按浅色主题实现；后续如需暗色再补齐 */
+
+body {
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 46%, var(--bg-bottom) 100%);
+  color: var(--text);
+  font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+::selection {
+  background: rgba(11, 15, 24, 0.14);
+}
+
+.font-display {
+  font-family: var(--font-display), ui-serif, Georgia, "Times New Roman", Times, serif;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+}
+
+.card-hover {
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.card-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--stroke-strong);
+}

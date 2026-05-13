@@ -1,0 +1,34 @@
+## Monorepo gitignore (root)
+
+# dependencies
+**/node_modules
+
+# build outputs
+**/.next
+**/out
+**/dist
+**/build
+
+# local data / artifacts
+**/.data
+**/artifacts
+**/playwright-report
+**/test-results
+
+# env / secrets
+**/.env
+**/.env.*
+!**/.env.example
+
+# logs
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.pnpm-debug.log*
+
+# OS
+.DS_Store
+
+# misc (not part of product)
+resume.site/
+fix-playwright-proxy.patch

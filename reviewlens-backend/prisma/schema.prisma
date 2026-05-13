@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Platform {
+  TAOBAO
+}
+
+enum Category {
+  PERFUME
+  LIPSTICK
+  MASK
+}
+
+enum RatingFilter {
+  ALL
+  GOOD
+  NEUTRAL
+  BAD
+}
+
+enum TaskStatus {
+  PENDING
+  CRAWLING
+  TO_ANALYZE
+  ANALYZING
+  TO_REPORT
+  PUBLISHED
+  FAILED
+  CANCELED
+}
+
+model Task {
+  id             String      @id
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  platform       Platform
+  category       Category
+  keyword        String
+  prompt         String
+  sampleSize     Int
+  timeRangeMonths Int
+  ratingFilter   RatingFilter
+  analysisFocus  String
+  status         TaskStatus
+  progress       Int         @default(0)
+
+  // 统计（首期可为空，跑完后填充）
+  products       Int?
+  comments       Int?
+  ratingGood     Int?
+  ratingNeutral  Int?
+  ratingBad      Int?
+
+  logs           TaskLog[]
+  crawledProducts Product[]
+  crawledComments Comment[]
+  report         Report?
+}
+
+model TaskLog {
+  id        String   @id
+  taskId    String
+  at        DateTime @default(now())
+  level     String   // info | warn | error
+  message   String
+
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId, at])
+}
+
+model Report {
+  id        String   @id
+  taskId    String   @unique
+  createdAt DateTime @default(now())
+  title     String
+  subtitle  String
+  keyFindings String[] @default([])
+
+  topWords  Json?
+
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  topics    Topic[]
+}
+
+model Topic {
+  id        String   @id
+  reportId  String
+  kind      String   // pain | highlight
+  title     String
+  summary   String
+  percent   Float
+  n         Int
+  keywords  String[] @default([])
+
+  report    Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  evidences Evidence[]
+
+  @@index([reportId, kind])
+}
+
+model Evidence {
+  id       String  @id
+  topicId  String
+  content  String
+
+  topic    Topic   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  @@index([topicId])
+}
+
+model Product {
+  id        String   @id
+  taskId    String
+  url       String
+  title     String?
+  createdAt DateTime @default(now())
+
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+
+  @@index([taskId])
+  @@unique([taskId, url])
+}
+
+model Comment {
+  id            String   @id
+  taskId        String
+  productId     String?
+  rating        Int
+  commentAt     DateTime
+  content       String
+  appendContent String?
+  sku           String?
+  likeCount     Int?
+  raw           Json?
+
+  task          Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  product       Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([taskId, commentAt])
+  @@index([productId])
+}

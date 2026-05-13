@@ -1,0 +1,4 @@
+content,rating,date,appendContent,sku,likeCount,productUrl,productTitle
+"味道很好闻，留香还不错。",5,2026-04-12,,50ml,12,https://example.com/p/123,"示例香水A"
+"包装有点简陋，喷头漏液。",2,2026-04-10,"追评：客服处理还可以。",50ml,3,https://example.com/p/123,"示例香水A"
+"颜色好看但有点拔干。",3,2026-04-08,,#01,5,https://example.com/p/456,"示例口红B"
